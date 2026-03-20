@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario con validación</title>
+    <link rel="stylesheet" href="../css/formStyles.css" type="text/css" />
+    
+
+</head>
+<body>
+    <h2>Formulario recuperación de contraseña</h2>
+    <form id="miFormulario" action="" enctype="application/x-www-form-urlencoded" novalidate>
+        
+        <label for="PreguntaRecuperacion">Pregunta de recuperación:</label>
+        <input type="text" id="PreguntaRecuperacion" name="PreguntaRecuperacion"  
+               required autofocus>
+        <span class="mensaje" id="error-Pregunta"></span>
+
+
+        <label for="RespuestaRecuperacion">Respuesta de Recuperacion:</label>
+        <input type="password" id="RespuestaRecuperacion" name="RespuestaRecuperacion"  
+               required autofocus>
+        <span class="mensaje" id="error-Respuesta"></span>
+
+        
+        <label for="NewPassword">New Password:</label>
+        <input type="password" id="NewPassword" name="NewPassword"  
+               required autofocus>
+        <span class="mensaje" id="error-password"></span>
+
+        <label for="ConfirmPassword">Confirm Password:</label>
+        <input type="password" id="ConfirmPassword" name="ConfirmPassword" 
+               required>
+
+        <span class="mensaje" id="error-ConfirmPassword"></span>
+        
+       
+        <div class="btnContainer">            
+            <button class="submit" type="submit">Confirmar</button>
+            <button class="reset" type="reset">Limpiar</button>
+        </div>
+        
+    </form>
+
+    <pre id="resultado"></pre>
+
+ <!--   <script src="../js/validateFormB.js"></script> -->
+
+
+</body>
+</html>
