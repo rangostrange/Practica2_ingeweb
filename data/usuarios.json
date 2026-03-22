@@ -12,5 +12,13 @@
     "Password": "$2b$10$Sl89CCW2vyhUcn.RBbrizOdCKk6X9oqHZnZhdSubVonWR7pUZ7DWi",
     "PreguntaRecuperacion": "Videojuego favorito",
     "RespuestaRecuperacion": "$2b$10$QLgVLtoClNiPM92GwpKOQ.dIH5L79fNEvHU.2q8/vMTQBTN1PKykW"
+  },
+  {
+    "nombre": "Emilio",
+    "correo": "emilio@correo.com",
+    "Password": "$2b$10$um2NfJJ95H2RLGDofSr9Z.yJWTGwmZLKJNm6awdkJe1noNhE0GwiG",
+    "PreguntaRecuperacion": "Cómo se llama tu primer mascota?",
+    "RespuestaRecuperacion": "$2b$10$TPXXNRKD5EWiDi7QNwJEZusELB7ChgVMXU9/7MwhOOSMmOihhybu2",
+    "fecha": "2026-03-22T20:31:10.942Z"
   }
 ]
