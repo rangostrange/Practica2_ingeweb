@@ -2,14 +2,14 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Formulario con validación</title>
+    <title>Recuperacion</title>
     <link rel="stylesheet" href="../css/formStyles.css" type="text/css" />
     
 
 </head>
 <body>
     <h2>Formulario recuperación de contraseña</h2>
-    <form id="miFormulario" action="" enctype="application/x-www-form-urlencoded" novalidate>
+    <form id="recuperación" action="" enctype="application/x-www-form-urlencoded" novalidate>
         
         <label for="PreguntaRecuperacion">Pregunta de recuperación:</label>
         <input type="text" id="PreguntaRecuperacion" name="PreguntaRecuperacion"  
@@ -34,7 +34,8 @@
 
         <span class="mensaje" id="error-ConfirmPassword"></span>
         
-       
+       <a href="/html/Login.html">Iniciar sesion</a>
+
         <div class="btnContainer">            
             <button class="submit" type="submit">Confirmar</button>
             <button class="reset" type="reset">Limpiar</button>
@@ -42,9 +43,9 @@
         
     </form>
 
-    <pre id="resultado"></pre>
+    
 
- <!--   <script src="../js/validateFormB.js"></script> -->
+    <script src="../js/validateFormB.js"></script> 
 
 
 </body>

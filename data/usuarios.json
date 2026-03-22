@@ -1,0 +1,16 @@
+[
+  {
+    "nombre": "Dracula",
+    "correo": "d@g.com",
+    "Password": "$2b$10$40DVVYNhImBS6oYzyjkwDOpmbzyner.PfW7g1nCf0eXX2QO9PEMZu",
+    "PreguntaRecuperacion": "Videojuego favorito",
+    "RespuestaRecuperacion": "$2b$10$p04A35iywusrEKQamY1QIeimE/aWVhOeqYlv9DSlw9XNZmirf9/LS"
+  },
+  {
+    "nombre": "Dart",
+    "correo": "juan@gmail.com",
+    "Password": "$2b$10$Sl89CCW2vyhUcn.RBbrizOdCKk6X9oqHZnZhdSubVonWR7pUZ7DWi",
+    "PreguntaRecuperacion": "Videojuego favorito",
+    "RespuestaRecuperacion": "$2b$10$QLgVLtoClNiPM92GwpKOQ.dIH5L79fNEvHU.2q8/vMTQBTN1PKykW"
+  }
+]

@@ -9,25 +9,41 @@
 </head>
 <body>
     <h2>Formulario de registro</h2>
-    <form id="miFormulario" action="" enctype="application/x-www-form-urlencoded" novalidate>
+    <form id="Registro" action="" enctype="application/x-www-form-urlencoded" novalidate>
         <label for="nombre">Nombre:</label>
         <input type="text" id="nombre" name="nombre" 
                pattern="[a-zA-Z\s]{3,50}" 
                placeholder="Ej. Juan López" required autofocus>
         <span class="mensaje" id="error-nombre"></span>
 
-        <label for="tel">Teléfono:</label>
-        <input type="text" id="tel" name="tel" 
-               pattern="^\(52\)\d{10}$" 
-               required
-               placeholder="(52)5543234401">
-        <span class="mensaje" id="error-tel"></span>
-        
         <label for="correo">Correo electrónico:</label>
         <input type="email" id="correo" name="correo"
                placeholder="correo@ejemplo.com" required>
         <span class="mensaje" id="error-correo"></span>
 
+        <label for="PreguntaRecuperacion">Pregunta de recuperación:</label>
+        <input type="text" id="PreguntaRecuperacion" name="PreguntaRecuperacion"  
+               required autofocus>
+        <span class="mensaje" id="error-Pregunta"></span>
+
+        <label for="RespuestaRecuperacion">Respuesta de Recuperacion:</label>
+        <input type="password" id="RespuestaRecuperacion" name="RespuestaRecuperacion"  
+               required autofocus>
+        <span class="mensaje" id="error-Respuesta"></span>
+
+        <label for="Password">Contraseña:</label>
+        <input type="password" id="Password" name="Password"  
+               required autofocus>
+        <span class="mensaje" id="error-Password"></span>
+        
+        <label for="ConfirmarPassword">Confirmar Contraseña:</label>
+        <input type="password" id="ConPassword" name="ConPassword"  
+               required autofocus>
+        <span class="mensaje" id="error-ConPassword"></span>
+        
+
+        <a href="/html/Login.html">Iniciar sesion</a>
+         
         <div class="btnContainer">            
             <button class="submit" type="submit">Enviar</button>
             <button class="reset" type="reset">Limpiar</button>
