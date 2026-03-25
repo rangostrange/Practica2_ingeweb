@@ -2,41 +2,49 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Principal</title>
-
-    <script>
-        //  PROTECCIÓN
-        const auth = localStorage.getItem("auth");
-
-        if (auth !== "true") {
-            window.location.href = "/html/Login.html";
-        }
-    </script>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <script src="../js/dashboard.js" defer></script>
 </head>
 <body>
 
-    <h1>Dashboard</h1>
+    <!-- ── NAVBAR ── -->
+    <nav class="navbar">
+        <h1>Mi App</h1>
+        <button class="btn-logout" onclick="logout()">Cerrar sesión</button>
+    </nav>
 
-    <h2 id="bienvenida"></h2>
+    <!-- ── CONTENIDO ── -->
+    <main class="main-content">
 
-    <button onclick="logout()">Cerrar sesión</button>
+        <div class="card-bienvenida">
+            <h2 id="bienvenida">Cargando...</h2>
+            <p>Has iniciado sesión correctamente. Bienvenido a tu dashboard.</p>
+        </div>
 
-    <script>
-        //  MOSTRAR USUARIO
-        const usuario = JSON.parse(localStorage.getItem("usuario"));
+        <div class="cards-grid">
+            <div class="card">
+                <div class="icono">👤</div>
+                <h3>Mi perfil</h3>
+                <p>Ver y editar información de tu cuenta.</p>
+            </div>
+            <div class="card">
+                <div class="icono">📊</div>
+                <h3>Estadísticas</h3>
+                <p>Revisa tu actividad reciente.</p>
+            </div>
+            <div class="card">
+                <div class="icono">⚙️</div>
+                <h3>Configuración</h3>
+                <p>Personaliza tu experiencia.</p>
+            </div>
+        </div>
 
-        if (usuario) {
-            document.getElementById("bienvenida").textContent =
-                "Bienvenido " + usuario.nombre;
-        }
+    </main>
 
-        //  LOGOUT
-        function logout() {
-            localStorage.removeItem("auth");
-            localStorage.removeItem("usuario");
-            window.location.href = "/html/Login.html";
-        }
-    </script>
+    <footer>
+        &copy; 2026 Mi WebApp — Práctica Ingeniería Web
+    </footer>
 
 </body>
 </html>
