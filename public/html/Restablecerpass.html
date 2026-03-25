@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Recuperar contraseña</title>
+    <link rel="stylesheet" href="../css/formStyles.css">
+</head>
+<body>
+
+    <h2>Formulario recuperación de contraseña</h2>
+
+    <form id="recuperacion">
+
+        <label for="correo">Correo electrónico:</label>
+        <input type="email" id="correo" name="correo" required autofocus>
+        <span class="mensaje" id="error-correo"></span>
+
+        <label for="PreguntaRecuperacion">Pregunta de recuperación:</label>
+        <input type="text" id="PreguntaRecuperacion" name="PreguntaRecuperacion" required>
+        <span class="mensaje" id="error-Pregunta"></span>
+
+        <label for="respuesta">Respuesta de recuperación:</label>
+        <input type="password" id="respuesta" name="respuesta" required>
+        <span class="mensaje" id="error-Respuesta"></span>
+
+        <label for="Password">Nueva contraseña:</label>
+        <input type="password" id="Password" name="Password" required>
+        <span class="mensaje" id="error-password"></span>
+
+        <label for="ConfirmPassword">Confirmar contraseña:</label>
+        <input type="password" id="ConfirmPassword" name="ConfirmPassword" required>
+        <span class="mensaje" id="error-ConfirmPassword"></span>
+
+        <a href="/html/Login.html">Iniciar sesión</a>
+
+        <div class="btnContainer">
+            <button class="submit" type="submit">Confirmar</button>
+            <button class="reset" type="reset">Limpiar</button>
+        </div>
+
+    </form>
+
+    <span class="mensaje success" id="msg-exito" style="display:none"></span>
+
+    <script src="../js/restablecer.js"></script>
+
+</body>
+</html>
