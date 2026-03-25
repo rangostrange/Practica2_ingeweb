@@ -39,7 +39,7 @@ form.addEventListener("submit", async function(e) {
     if (!valido) return;
 
     try {
-        const response = await fetch("/recuperar", {
+        const response = await fetch("/recuperacion", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ correo, respuesta, Password })

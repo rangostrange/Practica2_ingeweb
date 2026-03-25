@@ -18,7 +18,15 @@
     "correo": "emilio@correo.com",
     "Password": "$2b$10$um2NfJJ95H2RLGDofSr9Z.yJWTGwmZLKJNm6awdkJe1noNhE0GwiG",
     "PreguntaRecuperacion": "Cómo se llama tu primer mascota?",
-    "RespuestaRecuperacion": "$2b$10$TPXXNRKD5EWiDi7QNwJEZusELB7ChgVMXU9/7MwhOOSMmOihhybu2",
+    "RespuestaRecuperacion": "$2b$10$UQXDkgPCfeumwC4hOjN2veCTlLAUI5eVRGucZr16511EcFezoRPOO",
     "fecha": "2026-03-22T20:31:10.942Z"
+  },
+  {
+    "nombre": "pepe pecas",
+    "correo": "correo@correo.com",
+    "Password": "$2b$10$vwSVnQUAWOt5RqH9KHdAOesBj3158b50Us2uElJ/5rD8rjGIdvuke",
+    "PreguntaRecuperacion": "Nombre de tu mascota actual",
+    "RespuestaRecuperacion": "$2b$10$88H3gwWmOsvkiMMysaYVVePL3qqdH16nH9ig21dNJ6TR8AMwRSAAC",
+    "fecha": "2026-03-25T02:51:42.203Z"
   }
 ]

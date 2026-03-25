@@ -29,7 +29,7 @@ router.get("/registro", (req, res) => {
 
 // Recuperación
 router.get("/recuperacion", (req, res) => {
-    res.sendFile("Recuperacion.html", { root: "public/html" });
+    res.sendFile("Restablecerpass.html", { root: "public/html" });
 });
 
 //principal
