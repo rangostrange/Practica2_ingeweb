@@ -1,112 +1,163 @@
 /**
- * Encargo de la lógica de negocio
+ * Lógica de negocio de la aplicación.
  * Responsabilidades:
- *  1. Procesar datos del formulario
- *  2. Guardar información
- *  3. Aplicar reglas de negocio
- *  4. Transformar datos
+ *  1. Validar datos recibidos
+ *  2. Aplicar reglas de negocio
+ *  3. Coordinar operaciones con el modelo
+ *  4. Retornar siempre { success, errors, data }
  */
-import bcrypt from "bcrypt";
-import fs from "fs/promises";
-import path from "path";
-import { fileURLToPath } from "url";
 
+import bcrypt from 'bcrypt';
+import {
+    writeUser,
+    findUserByEmail,
+    existsUser,
+    updatePassword
+} from '../models/models.js';
 
-const RUTA = "./data/usuarios.json";
-
-/* ===== UTILIDADES ===== */
-
-// leer archivo
-const leerUsuarios = async () => {
-    try {
-        const data = await fs.readFile(RUTA, "utf-8");
-        return JSON.parse(data);
-    } catch {
-        return [];
-    }
-};
-
-// guardar archivo
-const guardarUsuarios = async (usuarios) => {
-    await fs.writeFile(RUTA, JSON.stringify(usuarios, null, 2));
-};
+const SALT_ROUNDS = 12;
 
 /* ===== REGISTRO ===== */
-export const procesarFormulario = async (datos) => {
+export const processForm = async (datos) => {
     const { nombre, Password, PreguntaRecuperacion, RespuestaRecuperacion, correo } = datos;
-
     const errores = {};
 
     if (!nombre || !/^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/.test(nombre)) {
-        errores.nombre = "El nombre solo debe contener letras";
+        errores.nombre = 'El nombre solo debe contener letras';
     }
 
     if (!correo || !/^\S+@\S+\.\S+$/.test(correo)) {
-        errores.correo = "Correo inválido";
+        errores.correo = 'Correo inválido';
+    }
+
+    if (!Password || Password.length < 6) {
+        errores.Password = 'La contraseña debe tener al menos 6 caracteres';
+    }
+
+    if (!RespuestaRecuperacion || RespuestaRecuperacion.length < 2) {
+        errores.RespuestaRecuperacion = 'Respuesta de seguridad inválida';
     }
 
     if (Object.keys(errores).length > 0) {
-        throw new Error(JSON.stringify(errores));
+        return { success: false, errors: errores, data: null };
     }
 
-    const usuarios = await leerUsuarios();
+    try {
+        if (await existsUser(correo)) {
+            return {
+                success: false,
+                errors: { correo: 'El correo ya está registrado' },
+                data: null
+            };
+        }
 
-    // evitar duplicados
-    if (usuarios.find(u => u.correo === correo)) {
-        throw new Error("El usuario ya existe");
+        const passwordHash   = await bcrypt.hash(Password, SALT_ROUNDS);
+        const respuestaHash  = await bcrypt.hash(RespuestaRecuperacion, SALT_ROUNDS);
+
+        const nuevoUsuario = {
+            nombre,
+            correo,
+            Password: passwordHash,
+            PreguntaRecuperacion,
+            RespuestaRecuperacion: respuestaHash,
+            fecha: new Date()
+        };
+
+        await writeUser(nuevoUsuario);
+
+        return { success: true, errors: null, data: { nombre, correo } };
+
+    } catch (err) {
+        console.error('Error en processForm:', err.message);
+        return {
+            success: false,
+            errors: { general: 'No se pudo guardar la información' },
+            data: null
+        };
     }
-
-    // 🔐 HASH
-    const passwordHash = await bcrypt.hash(Password, 10);
-    const respuestaHash = await bcrypt.hash(RespuestaRecuperacion, 10);
-
-    const nuevoUsuario = {
-        nombre,
-        correo,
-        Password: passwordHash,
-        PreguntaRecuperacion,
-        RespuestaRecuperacion: respuestaHash,
-        fecha: new Date()
-    };
-
-    usuarios.push(nuevoUsuario);
-
-    await guardarUsuarios(usuarios);
-
-    return nuevoUsuario;
 };
 
 /* ===== LOGIN ===== */
-export const obtenerUsuarioPorCorreo = async (correo) => {
-    const usuarios = await leerUsuarios();
-    return usuarios.find(u => u.correo === correo);
+export const validateUser = async (correo, Password) => {
+    try {
+        const user = await findUserByEmail(correo);
+
+        if (!user) {
+            return {
+                success: false,
+                errors: { correo: 'Usuario no encontrado' },
+                data: null
+            };
+        }
+
+        const match = await bcrypt.compare(Password, user.Password);
+
+        if (!match) {
+            return {
+                success: false,
+                errors: { Password: 'Contraseña incorrecta' },
+                data: null
+            };
+        }
+
+        return {
+            success: true,
+            errors: null,
+            data: { nombre: user.nombre, correo: user.correo }
+        };
+
+    } catch (err) {
+        console.error('Error en validateUser:', err.message);
+        return {
+            success: false,
+            errors: { general: 'Error del servidor' },
+            data: null
+        };
+    }
 };
 
-/* ===== RECUPERAR PASSWORD ===== */
-export const actualizarPassword = async (correo, respuesta, nuevaPassword) => {
-    const usuarios = await leerUsuarios();
+/* ===== RECUPERAR CONTRASEÑA ===== */
+export const recoverPassword = async (correo, respuesta, nuevaPassword) => {
+    try {
+        if (!nuevaPassword || nuevaPassword.length < 6) {
+            return {
+                success: false,
+                errors: { Password: 'La nueva contraseña debe tener al menos 6 caracteres' },
+                data: null
+            };
+        }
 
-    const index = usuarios.findIndex(u => u.correo === correo);
+        const user = await findUserByEmail(correo);
 
-    if (index === -1) {
-        throw new Error("Usuario no encontrado");
+        if (!user) {
+            return {
+                success: false,
+                errors: { correo: 'Usuario no encontrado' },
+                data: null
+            };
+        }
+
+        const match = await bcrypt.compare(respuesta, user.RespuestaRecuperacion);
+
+        if (!match) {
+            return {
+                success: false,
+                errors: { respuesta: 'Respuesta incorrecta' },
+                data: null
+            };
+        }
+
+        const nuevaHash = await bcrypt.hash(nuevaPassword, SALT_ROUNDS);
+        await updatePassword(correo, nuevaHash);
+
+        return { success: true, errors: null, data: null };
+
+    } catch (err) {
+        console.error('Error en recoverPassword:', err.message);
+        return {
+            success: false,
+            errors: { general: 'Error del servidor' },
+            data: null
+        };
     }
-
-    const usuario = usuarios[index];
-
-    // 🔐 validar respuesta
-    const coincide = await bcrypt.compare(respuesta, usuario.RespuestaRecuperacion);
-
-    if (!coincide) {
-        throw new Error("Respuesta incorrecta");
-    }
-
-    // 🔐 nueva contraseña
-    const nuevaHash = await bcrypt.hash(nuevaPassword, 10);
-
-    usuarios[index].Password = nuevaHash;
-
-    await guardarUsuarios(usuarios);
-
-    return true;
 };

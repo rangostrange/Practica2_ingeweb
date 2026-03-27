@@ -1,109 +1,120 @@
 /**
- * Encargado de procesar las peticiones
+ * Encargado de procesar las peticiones HTTP.
  * Responsabilidades:
  *   1. Recibir datos del formulario.
- *   2. Procesos de validación adicionales.
- *   3. Llamar a servicios para procesar datos, si es el caso.
- *   4. Devolver respuesta al cliente.
+ *   2. Llamar al servicio correspondiente.
+ *   3. Devolver respuesta estandarizada { success, errors, data }.
  */
-import path from "path";
-import { fileURLToPath } from "url";
-import bcrypt from "bcrypt";
 
-import {
-    procesarFormulario,
-    obtenerUsuarioPorCorreo,
-    actualizarPassword
-} from "../services/formService.js";
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { processForm, validateUser, recoverPassword } from '../services/formService.js';
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname  = path.dirname(__filename);
 
-/* ===== LOGIN (VISTA PRINCIPAL) ===== */
-export const mostrarFormulario = (req, res) => {
-    res.sendFile(path.join(__dirname, "../public/html/Login.html"));
+/* ===== VISTAS ===== */
+export const showLogin = (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/html/Login.html'));
+};
+
+export const showRegister = (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/html/Registro.html'));
+};
+
+export const showRecover = (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/html/Restablecerpass.html'));
+};
+
+export const showDashboard = (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/html/Principal.html'));
 };
 
 /* ===== REGISTRO ===== */
-export const registrarUsuario = async (req, res) => {
+export const registerUser = async (req, res) => {
     try {
-        const resultado = await procesarFormulario(req.body);
+        const resultado = await processForm(req.body);
 
-        res.status(200).json({
-            ok: true,
-            data: resultado
+        if (!resultado.success) {
+            return res.status(400).json({
+                success: false,
+                errors: resultado.errors,
+                data: null
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            errors: null,
+            data: resultado.data
         });
 
-    } catch (error) {
-        res.status(400).json({
-            ok: false,
-            mensaje: error.message
+    } catch (err) {
+        console.error('Error en registerUser:', err.message);
+        return res.status(500).json({
+            success: false,
+            errors: { general: 'Error interno del servidor' },
+            data: null
         });
     }
 };
 
 /* ===== LOGIN ===== */
-export const loginUsuario = async (req, res) => {
+export const loginUser = async (req, res) => {
     try {
         const { correo, Password } = req.body;
+        const resultado = await validateUser(correo, Password);
 
-        if (!correo || !Password) {
-            throw new Error("Datos incompletos");
+        if (!resultado.success) {
+            return res.status(400).json({
+                success: false,
+                errors: resultado.errors,
+                data: null
+            });
         }
 
-        const usuario = await obtenerUsuarioPorCorreo(correo);
-
-        if (!usuario) {
-            throw new Error("Usuario no encontrado");
-        }
-
-        const coincide = await bcrypt.compare(Password, usuario.Password);
-
-        if (!coincide) {
-            throw new Error("Contraseña incorrecta");
-        }
-
-        res.json({
-            ok: true,
-            mensaje: "Login correcto",
-            usuario: {
-                nombre: usuario.nombre,
-                correo: usuario.correo
-            }
+        return res.status(200).json({
+            success: true,
+            errors: null,
+            data: resultado.data
         });
 
-    } catch (error) {
-        res.status(400).json({
-            ok: false,
-            mensaje: error.message
+    } catch (err) {
+        console.error('Error en loginUser:', err.message);
+        return res.status(500).json({
+            success: false,
+            errors: { general: 'Error interno del servidor' },
+            data: null
         });
     }
 };
 
-/* ===== RECUPERAR PASSWORD ===== */
-export const recuperarPassword = async (req, res) => {
+/* ===== RECUPERAR CONTRASEÑA ===== */
+export const recoverUser = async (req, res) => {
     try {
         const { correo, respuesta, Password } = req.body;
+        const resultado = await recoverPassword(correo, respuesta, Password);
 
-        if (!correo || !respuesta || !Password) {
-            throw new Error("Datos incompletos");
+        if (!resultado.success) {
+            return res.status(400).json({
+                success: false,
+                errors: resultado.errors,
+                data: null
+            });
         }
 
-        if (Password.length < 6) {
-            throw new Error("La nueva contraseña debe tener al menos 6 caracteres");
-        }
-
-        await actualizarPassword(correo, respuesta, Password);
-
-        res.json({
-            ok: true,
-            mensaje: "Contraseña actualizada correctamente"
+        return res.status(200).json({
+            success: true,
+            errors: null,
+            data: null
         });
 
-    } catch (error) {
-        res.status(400).json({
-            ok: false,
-            mensaje: error.message
+    } catch (err) {
+        console.error('Error en recoverUser:', err.message);
+        return res.status(500).json({
+            success: false,
+            errors: { general: 'Error interno del servidor' },
+            data: null
         });
     }
 };
