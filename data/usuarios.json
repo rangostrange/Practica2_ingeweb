@@ -28,5 +28,13 @@
     "PreguntaRecuperacion": "Nombre de tu mascota actual",
     "RespuestaRecuperacion": "$2b$10$88H3gwWmOsvkiMMysaYVVePL3qqdH16nH9ig21dNJ6TR8AMwRSAAC",
     "fecha": "2026-03-25T02:51:42.203Z"
+  },
+  {
+    "nombre": "Usuario",
+    "correo": "u@g.com",
+    "Password": "$2b$12$mqt/Huf6V3UzMg.nJnOb2.deCoMhAkMes.j7AudBdX2dtB6.G1tue",
+    "PreguntaRecuperacion": "Dia favorito",
+    "RespuestaRecuperacion": "$2b$12$GY0emC5HvODEJvP06UsujOHE1Ib1bqqyrHfudpoehvwMQkvtutVIG",
+    "fecha": "2026-04-03T20:25:54.583Z"
   }
 ]

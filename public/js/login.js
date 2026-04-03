@@ -1,4 +1,3 @@
-/* helpers */
 function setError(input, error, mensaje) {
     error.textContent = mensaje;
     input.classList.add('invalido');
@@ -11,14 +10,6 @@ function setValido(input, error) {
     input.classList.remove('invalido');
 }
 
-function debounce(func, delay = 300) {
-    let timeout;
-    return (...args) => {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => func(...args), delay);
-    };
-}
-
 function validarCampo(input) {
     const error = document.getElementById('error-' + input.id);
     if (!input || !error) return true;
@@ -29,7 +20,7 @@ function validarCampo(input) {
     }
 
     if (input.type === 'email' && input.validity.typeMismatch) {
-        setError(input, error, 'Correo electrónico inválido');
+        setError(input, error, 'Correo inválido');
         return false;
     }
 
@@ -48,8 +39,9 @@ document.addEventListener('DOMContentLoaded', () => {
     ['correo', 'Password'].forEach(id => {
         const input = document.getElementById(id);
         if (!input) return;
+
         input.addEventListener('blur', () => validarCampo(input));
-        input.addEventListener('input', debounce(() => validarCampo(input), 300));
+        input.addEventListener('input', () => validarCampo(input));
     });
 
     form.addEventListener('submit', async (e) => {
@@ -57,7 +49,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const inputs = form.querySelectorAll('input');
         let valido = true;
-        inputs.forEach(input => { if (!validarCampo(input)) valido = false; });
+
+        inputs.forEach(input => {
+            if (!validarCampo(input)) valido = false;
+        });
+
         if (!valido) return;
 
         try {
@@ -65,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    correo:   document.getElementById('correo').value,
+                    correo: document.getElementById('correo').value,
                     Password: document.getElementById('Password').value
                 })
             });
@@ -75,19 +71,19 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.success) {
                 localStorage.setItem('auth', 'true');
                 localStorage.setItem('usuario', JSON.stringify(data.data));
-                window.location.href = '/dashboard';
+
+                showModal("✅ Bienvenido " + data.data.nombre);
+
+                setTimeout(() => {
+                    window.location.href = "/dashboard";
+                }, 1500);
+
             } else {
-                const errores = data.errors || {};
-                Object.keys(errores).forEach(campo => {
-                    const input = document.getElementById(campo);
-                    const error = document.getElementById('error-' + campo);
-                    if (input && error) setError(input, error, errores[campo]);
-                });
+                showModal("❌ " + Object.values(data.errors).join(", "));
             }
 
         } catch (err) {
-            console.error('Error en login:', err);
-            alert('Error al conectar con el servidor');
+            showModal("❌ Error al conectar con el servidor");
         }
     });
 });
