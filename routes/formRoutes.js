@@ -1,47 +1,30 @@
-/*
-   rutas a acciones correspondientes a los
-   métodos HTTP POST y GET según correspondan
-   para las peticiones al servidor.
- 
-   En estas rutas se invocan a los controladores
-   que son los encargados de procesar las
-   peticiones.
-*/
- import express from "express";
+/**
+ * Rutas de la aplicación.
+ * Asocia cada URL con su controlador correspondiente.
+ */
+
+import express from 'express';
 import {
-    mostrarFormulario,
-    registrarUsuario,
-    loginUsuario,
-    recuperarPassword
-} from "../controllers/formControllers.js"; 
+    showLogin,
+    showRegister,
+    showRecover,
+    showDashboard,
+    registerUser,
+    loginUser,
+    recoverUser
+} from '../controllers/formControllers.js';
 
 const router = express.Router();
 
 /* ===== VISTAS ===== */
+router.get('/',            showLogin);
+router.get('/registro',    showRegister);
+router.get('/recuperacion', showRecover);
+router.get('/dashboard',   showDashboard);
 
-// Login (principal)
-router.get("/", mostrarFormulario);
-
-// Registro
-router.get("/registro", (req, res) => {
-    res.sendFile("Registro.html", { root: "public/html" });
-});
-
-// Recuperación
-router.get("/recuperacion", (req, res) => {
-    res.sendFile("Restablecerpass.html", { root: "public/html" });
-});
-
-//principal
-    router.get("/dashboard", (req, res) => {
-    res.sendFile("Principal.html", { root: "public/html" });
-});
 /* ===== ACCIONES ===== */
-
-router.post("/registro", registrarUsuario);
-router.post("/login", loginUsuario);
-router.post("/recuperacion", recuperarPassword);
+router.post('/registro',    registerUser);
+router.post('/login',       loginUser);
+router.post('/recuperacion', recoverUser);
 
 export default router;
- 
- 
